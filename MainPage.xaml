@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:ToDoList"
+             x:DataType="viewmodel:MainViewModel"
+             x:Class="ToDoList.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <Entry
+                Placeholder="New task"
+                Text="{Binding NewTaskText}"/>
+
+            <Button
+                Text="Add"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding IsNotBusy}"
+                Command="{Binding AddNewTaskCommand}"/>
+
+            <CollectionView ItemsSource="{Binding TaskList}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodel:ToDoItem">
+                        <Label
+                            Text="{Binding TaskName}"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
