@@ -23,6 +23,11 @@ public partial class MainViewModel : ObservableObject
 
     public bool IsNotBusy => !isBusy;
 
+    [RelayCommand]
+    void DeleteTask()
+    {
+        return;
+    }
 
     [RelayCommand]
     void AddNewTask()

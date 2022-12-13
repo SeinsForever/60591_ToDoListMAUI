@@ -13,7 +13,8 @@
 
             <Entry
                 Placeholder="New task"
-                Text="{Binding NewTaskText}"/>
+                Text="{Binding NewTaskText}"
+                />
 
             <Button
                 Text="Add"
@@ -24,8 +25,34 @@
             <CollectionView ItemsSource="{Binding TaskList}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodel:ToDoItem">
-                        <Label
-                            Text="{Binding TaskName}"/>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem x:DataType="viewmodel:MainViewModel"
+                                               Text="Delete"
+                                               Command="{Binding DeleteTaskCommand}"/>
+
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Border Stroke="White">
+                                <Label
+                                    Text="{Binding TaskName}">
+                                    <Label.Style>
+                                        <Style TargetType="Label">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Done}"
+                                                             TargetType="Label"
+                                                             Value="True">
+                                                    <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                    <Setter Property="FontAttributes" Value="Bold" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+                                </Label>
+                            </Border>
+                        </SwipeView>
+
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
