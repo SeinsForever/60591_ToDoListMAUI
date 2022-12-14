@@ -11,52 +11,185 @@
             Padding="30,0"
             VerticalOptions="Center">
 
-            <Entry
-                Placeholder="New task"
-                Text="{Binding NewTaskText}"
-                />
-
             <Button
-                Text="Add"
-                HorizontalOptions="Center"
-                IsEnabled="{Binding IsNotBusy}"
-                Command="{Binding AddNewTaskCommand}"/>
+                Text="Delete all"
+                TextColor="Red"
+                WidthRequest="100"
+                HorizontalOptions="End"
+                Command="{Binding DeleteListCommand}"/>
 
-            <CollectionView ItemsSource="{Binding TaskList}">
+            <HorizontalStackLayout
+                HorizontalOptions="Center">
+                <Entry
+                    Placeholder="New task"
+                    MinimumWidthRequest="200"
+                    MaximumWidthRequest="400"
+                    HorizontalOptions="End"
+                    Text="{Binding NewTaskText}"
+                    ReturnCommand="{Binding AddNewTaskCommand}"/>
+                <Entry
+                    Placeholder="Amount"
+                    MinimumWidthRequest="200"
+                    MaximumWidthRequest="400"
+                    HorizontalOptions="End"
+                    Text="{Binding NewTaskAmount}"
+                    Keyboard="Numeric"
+                    ReturnCommand="{Binding AddNewTaskCommand}"/>
+                <Button
+                    Text="Add"
+                    HorizontalOptions="Start"
+                    WidthRequest="100"
+                    IsEnabled="{Binding IsNotBusy}"
+                    Command="{Binding AddNewTaskCommand}"/>
+            </HorizontalStackLayout>
+                
+
+
+            <CollectionView ItemsSource="{Binding TaskList}"
+                            SelectionMode="None"
+                            MaximumWidthRequest="500"
+                            EmptyView="No tasks!">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="viewmodel:ToDoItem">
-                        <SwipeView>
-                            <SwipeView.RightItems>
-                                <SwipeItems>
-                                    <SwipeItem x:DataType="viewmodel:MainViewModel"
-                                               Text="Delete"
-                                               Command="{Binding DeleteTaskCommand}"/>
-
-                                </SwipeItems>
-                            </SwipeView.RightItems>
+                    <DataTemplate x:DataType="{x:Type x:Object}">
                             <Border Stroke="White">
-                                <Label
-                                    Text="{Binding TaskName}">
-                                    <Label.Style>
-                                        <Style TargetType="Label">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Done}"
-                                                             TargetType="Label"
-                                                             Value="True">
-                                                    <Setter Property="TextDecorations" Value="Strikethrough" />
-                                                    <Setter Property="FontAttributes" Value="Bold" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Label.Style>
-                                </Label>
-                            </Border>
-                        </SwipeView>
+                                <Grid Padding="10"
+                                      ColumnDefinitions="auto, *, *, *"
+                                      x:DataType="viewmodel:MainViewModel"
+                                      MaximumWidthRequest="500">
+                                    <CheckBox 
+                                        x:DataType="viewmodel:ToDoItem"
+                                        IsChecked="{Binding Done}"
+                                              Grid.Column="0"/>
+                                <HorizontalStackLayout
+                                    Grid.Column="1">
+                                    <Label
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Center"
+                                        FontSize="20"
+                                        x:DataType="viewmodel:ToDoItem"
+                                        IsVisible="{Binding IsNotEditing}"
+                                        Text="{Binding TaskName}">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Done}"
+                                                                 TargetType="Label"
+                                                                 Value="True">
+                                                        <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                        <Setter Property="FontAttributes" Value="Bold" />
+                                                        <Setter Property="TextColor" Value="Gray" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
 
+                                    <Entry
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Center"
+                                        FontSize="20"
+                                        x:DataType="viewmodel:ToDoItem"
+                                        IsVisible="{Binding IsEditing}"
+                                        IsEnabled="{Binding IsEditing}"
+                                        Text="{Binding TaskName}">
+                                        <Entry.Style>
+                                            <Style TargetType="Entry">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEditing}"
+                                                                     TargetType="Entry"
+                                                                     Value="True">
+                                                            <Setter Property="FontAttributes" Value="Italic" />
+                                                            <Setter Property="TextColor" Value="LightGreen" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Entry.Style>
+                                    </Entry>
+
+                                    <Label
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Center"
+                                        FontSize="20"
+                                        IsVisible="{Binding IsNotEditing}"
+                                        x:DataType="viewmodel:ToDoItem"
+                                        Text="{Binding Amount, StringFormat=',  amount: {0}'}">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Amount}"
+                                                                 TargetType="Label"
+                                                                 Value="0">
+                                                        <Setter Property="IsVisible" Value="False" />
+                                                </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
+
+                                    <Entry
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Center"
+                                        FontSize="20"
+                                        x:DataType="viewmodel:ToDoItem"
+                                        IsVisible="{Binding IsEditing}"
+                                        IsEnabled="{Binding IsEditing}"
+                                        Text="{Binding Amount}">
+                                        <Entry.Style>
+                                            <Style TargetType="Entry">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEditing}"
+                                                                     TargetType="Entry"
+                                                                     Value="True">
+                                                            <Setter Property="FontAttributes" Value="Italic" />
+                                                            <Setter Property="TextColor" Value="LightGreen" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Entry.Style>
+                                    </Entry>
+
+                                    
+                                </HorizontalStackLayout>
+                                    
+
+                                    
+
+                                <HorizontalStackLayout Grid.Column="3"
+                                                       HorizontalOptions="End">
+                                    <Button
+                                        Text="Edit"
+                                        IsEnabled="True"
+                                        x:DataType="viewmodel:ToDoItem"
+                                        Command="{Binding Source={RelativeSource FindAncestorBindingContext, AncestorType={x:Type viewmodel:MainViewModel}}, Path=EditItemCommand}"
+                                        CommandParameter="{Binding .}">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEditing}"
+                                                                 TargetType="Button"
+                                                                 Value="True">
+                                                        <Setter Property="Text" Value="Save" />
+                                                </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+
+                                    <Button
+                                        Text="Delete"
+                                        IsEnabled="True"
+                                        Command="{Binding Source={RelativeSource FindAncestorBindingContext, AncestorType={x:Type viewmodel:MainViewModel}}, Path=DeleteItemCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </HorizontalStackLayout>
+                                    
+
+                                </Grid>
+
+
+                            </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
         </VerticalStackLayout>
     </ScrollView>
 
